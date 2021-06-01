@@ -1,0 +1,19 @@
+start in south yard
+if go left invis rect stops u and nps says I wouldn't reccomend going there bcz y7 
+
+go into school
+first stop: science
+mr kidd tells about how mr flanagan been working on a project for the past week, (teacher) went in but never came in
+go in
+fight 
+Mr Flanagan has 3 attacks
+once kills gives you flanaganium - see (npc) to add it to your sword to fight Mr Carr
+if attacked by main attack, screen shake
+
+next stop: computing
+----
+once kills you gives you
+
+
+use **kwargs for dailogue. Iterate using for, use keyword as name and definition as dialogue and iterate 
+through both of them with time.sleep() at end 
