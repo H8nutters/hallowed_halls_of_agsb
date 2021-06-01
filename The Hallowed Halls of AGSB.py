@@ -106,7 +106,7 @@ tile_index = {1: concrete_1_img,
 
 #--------------South Yard-------------#
 def south_yard():
-  
+  print(player.state["is_jumping"])
   global tim_speaking, text_timer
   
   #-----------calculates floor level-------------#

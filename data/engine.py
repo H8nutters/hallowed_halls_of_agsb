@@ -15,7 +15,7 @@ class physics_obj:
                             "left":False}
 
   #-------------positions the object as per its collisions-------------#
-  def collisions(self, movement, platforms, entity_move_x, entity_move_y, display, scroll, dt, assign_self, assign_rect, set_onground):
+  def collisions(self, movement, platforms, entity_move_x, entity_move_y, display, scroll, dt, assign_self, assign_rect):
     entity_move_x(1)
     assign_rect()
     collision_list = self.collision_test(platforms)
@@ -46,7 +46,6 @@ class physics_obj:
         self.rect.top = block.bottom
         self.collision_types["top"] = True
       assign_self()
-    pygame.draw.rect(display, (200,0,0), (self.rect.x-scroll[0], self.rect.y-scroll[1], self.rect.w, self.rect.h), 10)
     
   #-------------checks for collisions---------------#
   def collision_test(self, obj_list):
@@ -124,8 +123,8 @@ class entity:
       self.particle_timer -= 1
       
   #-----------handles entity movement + particles on feet----------#
-  def move(self, movement, platforms, scroll, display, entity_move_x, entity_move_y, dt, assign_self, assign_rect, set_onground):
-    collision_types = self.obj.collisions(movement, platforms, entity_move_x, entity_move_y, display, scroll, dt, assign_self, assign_rect, set_onground)
+  def move(self, movement, platforms, scroll, display, entity_move_x, entity_move_y, dt, assign_self, assign_rect):
+    collision_types = self.obj.collisions(movement, platforms, entity_move_x, entity_move_y, display, scroll, dt, assign_self, assign_rect)
     self.update_rects()
     self.change_particle_timer()
     render_particles(display, self.particles, movement)
@@ -156,7 +155,6 @@ class entity:
     self.img = self.flip(self.animation_frames[img], self.isflip).copy()
     self.set_dimensions()
     surface.blit(self.img, ((int(self.position.x)-scroll[0]), int(self.position.y)-scroll[1]))
-    pygame.draw.rect(surface, (255,0,255), (self.rect.x - scroll[0], self.rect.y - scroll[1], self.rect.w, self.rect.h), 4)
     
 #----------------------child class of entity 'player' for further physics-------------------------#
 class player(entity):
@@ -193,7 +191,7 @@ class player(entity):
     if self.velocity.y > 7:
       self.velocity.y = 7
     self.position.y += self.velocity.y * dt + (self.acceleration.y * .5) * (dt * dt)          #newton's equations of motion (s = ut + 1/2(at ^ 2))
-    if self.state["on_ground"]:
+    if self.obj.collision_types["bottom"]:
       self.velocity.y = 0    
     self.rect.y = int(self.position.y)
 
@@ -215,19 +213,14 @@ class player(entity):
     self.rect = self.obj.rect  
     if self.obj.collision_types["bottom"]:
       self.state["on_ground"] = True
+      self.state["is_jumping"] = False
       self.velocity.y = 0        
-    self.set_onground()
-    #print(self.state["on_ground"], self.obj.collision_types["bottom"])
     if self.obj.collision_types["right"]:
       self.moving["right"] = False
       self.velocity.x = 0
     if self.obj.collision_types["left"]:
       self.moving["left"] = False
       self.velocity.x = 0
-        
-  def set_onground(self):
-    self.state["on_ground"] = self.obj.collision_types["bottom"]
-    
   def jump(self):
     if self.state["on_ground"]:
       self.state["is_jumping"] = True
@@ -239,7 +232,7 @@ class player(entity):
     self.position.y = self.rect.y
 
   def update(self, dt, platforms, scroll, display):
-    super().move(self.velocity, platforms, scroll, display, self.move_x, self.move_y, dt, self.assign_self, self.assign_rect, self.set_onground)
+    super().move(self.velocity, platforms, scroll, display, self.move_x, self.move_y, dt, self.assign_self, self.assign_rect)
     
 
 #-----------------class for camera------------------#
