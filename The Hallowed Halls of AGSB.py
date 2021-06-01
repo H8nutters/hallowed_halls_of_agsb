@@ -5,7 +5,7 @@ import data.engine as e
 from pygame.locals import *
 clock = pygame.time.Clock()
 pygame.init()
-
+print("hi")
 #------------reads and writes game data----------#
 with open("data/data.json") as f:     #opens and closes file
   data = json.load(f)             #stores game data in dictionary 'data'
