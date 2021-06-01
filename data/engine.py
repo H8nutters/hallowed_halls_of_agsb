@@ -1,5 +1,5 @@
 import pygame, random, math, time
-import data.modules.noise as noise
+import noise as noise
 from pygame.locals import *
 from abc import ABC, abstractmethod
 
@@ -16,7 +16,7 @@ class physics_obj:
 
   #-------------positions the object as per its collisions-------------#
   def collisions(self, movement, platforms, entity_move_x, entity_move_y, display, scroll, dt, assign_self, assign_rect, set_onground):
-    entity_move_x(dt)
+    entity_move_x(1)
     assign_rect()
     collision_list = self.collision_test(platforms)
     self.collision_types = {"top": False,
@@ -31,9 +31,9 @@ class physics_obj:
         self.rect.left = block.right
         self.collision_types["left"] = True
       assign_self()
-    entity_move_y(dt)
+    entity_move_y(1)
     assign_rect()
-    self.collision_list = self.collision_test(platforms)
+    collision_list = self.collision_test(platforms)
     self.collision_types = {"top": False,
                             "bottom": False, 
                             "right": False, 
